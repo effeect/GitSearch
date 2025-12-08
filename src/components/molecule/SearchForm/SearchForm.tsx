@@ -4,7 +4,18 @@ import SearchButton from "../../atoms/SearchButton/SearchButton";
 import React from "react";
 import { useState } from "react";
 
-const SearchForm = () => {
+type searchParams = {
+  q: String;
+  per_page?: number;
+  page?: number;
+};
+
+interface SearchFormProps {
+  // A function that accepts an array of repository items (data) and returns void
+  onSearchSuccess: (data: any[]) => void;
+}
+
+const SearchForm: React.FC<SearchFormProps> = ({ onSearchSuccess }) => {
   const [currentSearchQuery, setCurrentSearchQuery] = useState("");
 
   // The function automatically knows 'newQuery' is a string thanks to the SearchBarProps interface
@@ -13,23 +24,26 @@ const SearchForm = () => {
     setCurrentSearchQuery(newQuery);
   };
 
-  const handleSearch = async (searchParams: any) => {
+  const handleSearch = async (search: searchParams) => {
     try {
       const response = await fetch("/api/search/repos", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ q: searchParams }),
+        body: JSON.stringify({
+          q: search.q,
+          per_page: search.per_page,
+          page: search.page,
+        }),
       });
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-
       const data = await response.json();
-      // Do something with the list of repositories (data is an array of items)
-      console.log("Search Results:", data);
+      onSearchSuccess(data);
+      // console.log("Search Results:", data);
     } catch (error) {
       console.error("Failed to search repositories", error);
     }
@@ -41,7 +55,7 @@ const SearchForm = () => {
         className="box"
         onSubmit={(e) => {
           e.preventDefault(); // Prevents the page from doing default form stuff
-          handleSearch(currentSearchQuery);
+          handleSearch({ q: currentSearchQuery, per_page: 20, page: 1 }); // Need to handle this better
         }}
       >
         <SearchBar onQueryChange={handleSearchBarChange} />
