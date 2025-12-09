@@ -3,5 +3,17 @@
   "references": [
     { "path": "./tsconfig.app.json" },
     { "path": "./tsconfig.node.json" }
-  ]
+  ],
+  "compilerOptions": {
+    // CRITICAL FIX: Ensures compatibility between CommonJS (Node/Jest)
+    // and ES Modules (modern JavaScript) style imports.
+    "esModuleInterop": true,
+
+    // Also, ensure these were set from our previous debugging steps:
+    "jsx": "react",
+    "types": [
+      // ... your test runner types (jest or vitest/globals)
+      "@testing-library/jest-dom"
+    ]
+  }
 }

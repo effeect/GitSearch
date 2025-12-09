@@ -14,6 +14,12 @@ import {
 import HomePage from "./pages/HomePage";
 import MainLayout from "./layouts/MainLayout";
 
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { fas } from "@fortawesome/free-solid-svg-icons";
+
+// Adding Font Answesome Icons
+library.add(fas);
+
 function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(

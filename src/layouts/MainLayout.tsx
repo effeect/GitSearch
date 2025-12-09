@@ -3,6 +3,7 @@ import React from "react";
 import { Outlet } from "react-router-dom";
 
 import Navbar from "../components/atoms/Navbar/Navbar";
+import Footer from "../components/atoms/Footer/Footer";
 
 const MainLayout = () => {
   return (
@@ -14,7 +15,9 @@ const MainLayout = () => {
         {/* Main page content will be rendered here */}
         <Outlet />
       </div>
-      <div className="container">Footer Here</div>
+      <div className="container">
+        <Footer />
+      </div>
     </>
   );
 };

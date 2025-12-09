@@ -14,11 +14,17 @@ type searchParams = {
 interface SearchFormProps {
   // A function that accepts an array of repository items (data) and returns void
   onSearchSuccess: (data: any[]) => void;
+  setLoading: (isLoading: boolean) => void;
 }
 
-const SearchForm: React.FC<SearchFormProps> = ({ onSearchSuccess }) => {
+const SearchForm: React.FC<SearchFormProps> = ({
+  onSearchSuccess,
+  setLoading,
+}) => {
   const [currentSearchQuery, setCurrentSearchQuery] = useState("");
   const [qualiferQuery, setQualifierQuery] = useState("");
+  // const [loading, setLoading] = useState(false);
+
   // The function automatically knows 'newQuery' is a string thanks to the SearchBarProps interface
   const handleSearchBarChange = (newQuery: string) => {
     // console.log("Query received from SearchBar:", newQuery);
@@ -31,6 +37,7 @@ const SearchForm: React.FC<SearchFormProps> = ({ onSearchSuccess }) => {
 
   const handleSearch = async (search: searchParams) => {
     try {
+      setLoading(true);
       const response = await fetch("/api/search/repos", {
         method: "POST",
         headers: {
@@ -48,8 +55,10 @@ const SearchForm: React.FC<SearchFormProps> = ({ onSearchSuccess }) => {
       }
       const data = await response.json();
       onSearchSuccess(data);
-      // console.log("Search Results:", data);
+      setLoading(false);
+      console.log("Search Results:", data);
     } catch (error) {
+      setLoading(false);
       console.error("Failed to search repositories", error);
     }
   };

@@ -1,5 +1,7 @@
 // ResultList.tsx
 import React from "react";
+import { ResultField } from "../../atoms/ResultField/ResultField";
+
 type RepoResult = any;
 
 interface ResultListProps {
@@ -8,20 +10,21 @@ interface ResultListProps {
 
 const ResultList: React.FC<ResultListProps> = ({ results }) => {
   if (results.length === 0) {
-    return <div>No repositories found. Start a search!</div>;
+    return (
+      <div className="container">
+        <h3 className="title is-5 has-text-centered">No repositories found.</h3>
+      </div>
+    );
   }
 
   return (
     <div className="container">
-      <h3>Found {results.length} Repositories</h3>
+      <h3 className="title is-5 has-text-centered">
+        Found {results.length} Repositories
+      </h3>
 
       {results.map((repo, index) => (
-        <div className="box" key={index}>
-          <h1>{repo.full_name}</h1>
-          <br />
-          <p>{repo.description}</p>
-          <strong>{repo.full_name}</strong> - {repo.stargazers_count} Stars
-        </div>
+        <ResultField repo={repo} index={index} />
       ))}
     </div>
   );

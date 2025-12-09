@@ -5,7 +5,6 @@ interface RuleSetProps {
   onQualifiersChange: (qualifierString: string) => void;
 }
 
-// Simple ID generator for unique key/deletion
 let nextId = 0;
 
 const RuleSet = ({ onQualifiersChange }: RuleSetProps) => {
