@@ -16,6 +16,7 @@ import MainLayout from "./layouts/MainLayout";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { fas } from "@fortawesome/free-solid-svg-icons";
+import RepoPage from "./pages/RepoPage";
 
 // Adding Font Answesome Icons
 library.add(fas);
@@ -26,10 +27,7 @@ function App() {
       // Main Layout which contains the navbar/footer
       <Route path="/" element={<MainLayout />}>
         <Route index element={<HomePage />} />
-        <Route
-          path="repo/:owner/:repoName"
-          element={<div>Repo Page</div>}
-        ></Route>
+        <Route path="/:owner/:repoName" element={<RepoPage />}></Route>
       </Route>
     )
   );
