@@ -1,6 +1,6 @@
 import SearchBar from "../../atoms/SearchBar/SearchBar";
 import SearchButton from "../../atoms/SearchButton/SearchButton";
-
+import RuleSet from "../RuleSet/RuleSet";
 import React from "react";
 import { useState } from "react";
 
@@ -8,6 +8,7 @@ type searchParams = {
   q: String;
   per_page?: number;
   page?: number;
+  sort?: string;
 };
 
 interface SearchFormProps {
@@ -17,11 +18,15 @@ interface SearchFormProps {
 
 const SearchForm: React.FC<SearchFormProps> = ({ onSearchSuccess }) => {
   const [currentSearchQuery, setCurrentSearchQuery] = useState("");
-
+  const [qualiferQuery, setQualifierQuery] = useState("");
   // The function automatically knows 'newQuery' is a string thanks to the SearchBarProps interface
   const handleSearchBarChange = (newQuery: string) => {
     // console.log("Query received from SearchBar:", newQuery);
     setCurrentSearchQuery(newQuery);
+  };
+
+  const handleQualifersChange = (newQualifierString: string) => {
+    setQualifierQuery(newQualifierString);
   };
 
   const handleSearch = async (search: searchParams) => {
@@ -49,18 +54,32 @@ const SearchForm: React.FC<SearchFormProps> = ({ onSearchSuccess }) => {
     }
   };
 
+  const executeSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const combinedQuery = [currentSearchQuery, qualiferQuery]
+      .filter(Boolean)
+      .join(" ")
+      .trim();
+    console.log(combinedQuery);
+    if (combinedQuery) {
+      handleSearch({ q: combinedQuery, per_page: 30, page: 1 });
+    } else {
+      console.log("Search aborted: Query is empty.");
+    }
+  };
+
   return (
     <>
-      <form
-        className="box"
-        onSubmit={(e) => {
-          e.preventDefault(); // Prevents the page from doing default form stuff
-          handleSearch({ q: currentSearchQuery, per_page: 20, page: 1 }); // Need to handle this better
-        }}
-      >
-        <SearchBar onQueryChange={handleSearchBarChange} />
-        <SearchButton />
-      </form>
+      <div className="columns">
+        <div className="column">
+          <form className="box" onSubmit={executeSearch}>
+            <SearchBar onQueryChange={handleSearchBarChange} />
+            <RuleSet onQualifiersChange={handleQualifersChange} />
+            <SearchButton />
+          </form>
+        </div>
+      </div>
     </>
   );
 };

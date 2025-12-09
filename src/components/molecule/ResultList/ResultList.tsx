@@ -12,15 +12,17 @@ const ResultList: React.FC<ResultListProps> = ({ results }) => {
   }
 
   return (
-    <div>
+    <div className="container">
       <h3>Found {results.length} Repositories</h3>
-      <ul>
-        {results.map((repo, index) => (
-          <li key={repo.id || index}>
-            <strong>{repo.full_name}</strong> - {repo.stargazers_count} Stars
-          </li>
-        ))}
-      </ul>
+
+      {results.map((repo, index) => (
+        <div className="box" key={index}>
+          <h1>{repo.full_name}</h1>
+          <br />
+          <p>{repo.description}</p>
+          <strong>{repo.full_name}</strong> - {repo.stargazers_count} Stars
+        </div>
+      ))}
     </div>
   );
 };

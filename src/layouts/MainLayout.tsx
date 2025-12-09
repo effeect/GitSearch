@@ -2,15 +2,19 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
 
+import Navbar from "../components/atoms/Navbar/Navbar";
+
 const MainLayout = () => {
   return (
     <>
-      <div>Navbar Here</div>
-      <div>
+      <div className="container">
+        <Navbar />
+      </div>
+      <div className="container is-widescreen">
         {/* Main page content will be rendered here */}
         <Outlet />
       </div>
-      <div>Footer Here</div>
+      <div className="container">Footer Here</div>
     </>
   );
 };

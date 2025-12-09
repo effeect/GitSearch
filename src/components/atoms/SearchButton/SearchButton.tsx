@@ -2,10 +2,7 @@ import React from "react";
 
 const SearchButton = () => {
   return (
-    <button
-      className="button is-primary"
-      onClick={() => console.log("hello world")}
-    >
+    <button type="submit" className="button is-primary">
       Search
     </button>
   );
