@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import SearchForm from "../components/molecule/SearchForm/SearchForm";
 import ResultList from "../components/molecule/ResultList/ResultList";
 import LoadingIcon from "../components/atoms/LoadingIcon/LoadingIcon";
@@ -13,18 +13,25 @@ const HomePage = () => {
 
   const pageSize = 30; // matches per_page in SearchForm
 
+  // UseMemo is actually super cool imo https://react.dev/reference/react/useMemo
+  // TODO, handle if the search is exactly 30 but the next page is empty!
+  const totalPages = useMemo(() => {
+    // console.log(totalResults);
+    if (totalResults < 30) return 0;
+    else return 1;
+  }, [totalResults, pageSize]);
+
   const handleSearchResults = (data: any[], totalCount: number) => {
-    console.log(data);
     setResults(data);
-    console.log(totalCount);
-
     setTotalResults(totalCount);
+    // console.log(data);
+    // console.log(totalPages);
+    // console.log(currentPage >= totalPages);
   };
-
-  const totalPages = Math.ceil(totalResults / pageSize);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
+    console.log(page);
   };
   return (
     <>
@@ -36,11 +43,11 @@ const HomePage = () => {
       />
       {/* Simple loading logic*/}
       {loading ? <LoadingIcon /> : <ResultList results={results} />}
-      {totalResults > 0 && totalPages > 1 && (
+      {totalResults > 0 && totalPages >= 1 && (
         <PageButton
           page={currentPage}
-          handlePageChange={handlePageChange} // This function just sets the state
-          disableNext={currentPage >= totalPages}
+          handlePageChange={handlePageChange} // This calculation is correct and uses the value updated in the previous render cycle
+          disableNext={totalPages == 0}
         />
       )}
     </>

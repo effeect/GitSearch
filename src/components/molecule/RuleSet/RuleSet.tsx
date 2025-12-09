@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Rule, { type Rule as RuleType } from "../../atoms/Rules/Rule"; // Assuming Rule.tsx is in the same directory
 
-// Put in an export type somewhere imo
+// Need to implement this so the field options can be altered depending on the search
 const FIELD_OPTIONS = [
   "stars",
   "language",

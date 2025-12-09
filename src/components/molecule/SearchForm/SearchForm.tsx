@@ -1,7 +1,7 @@
 import SearchBar from "../../atoms/SearchBar/SearchBar";
 import RuleSet from "../RuleSet/RuleSet";
 import React, { Children } from "react";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 
 type searchParams = {
   q: String;
@@ -21,19 +21,23 @@ interface SearchFormProps {
 const SearchForm: React.FC<SearchFormProps> = ({
   onSearchSuccess,
   setLoading,
-  currentPage = 1, // Setting default
+  currentPage,
   setCurrentPage,
 }) => {
   const [currentSearchQuery, setCurrentSearchQuery] = useState("");
   const [qualiferQuery, setQualifierQuery] = useState("");
   // const [loading, setLoading] = useState(false);
+  // Call below to get the final query to combine and make up
+  const getCombinedQuery = () =>
+    [currentSearchQuery, qualiferQuery].filter(Boolean).join(" ").trim();
+
+  const isFirstRender = useRef(true);
 
   // The function automatically knows 'newQuery' is a string thanks to the SearchBarProps interface
   const handleSearchBarChange = (newQuery: string) => {
     // console.log("Query received from SearchBar:", newQuery);
     setCurrentSearchQuery(newQuery);
   };
-
   const handleQualifersChange = (newQualifierString: string) => {
     setQualifierQuery(newQualifierString);
   };
@@ -57,34 +61,43 @@ const SearchForm: React.FC<SearchFormProps> = ({
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
+      console.log(data);
       onSearchSuccess(data, data.length);
-      setLoading(false);
+
       console.log("Search Results:", data);
     } catch (error) {
-      setLoading(false);
       console.error("Failed to search repositories", error);
+    } finally {
+      setLoading(false);
     }
   };
 
+  // Sending the search to the API!
   const executeSearch = (page: number) => {
-    const combinedQuery = [currentSearchQuery, qualiferQuery]
-      .filter(Boolean)
-      .join(" ")
-      .trim();
-    console.log(combinedQuery);
-    if (combinedQuery) {
-      handleSearch({ q: combinedQuery, per_page: 30, page: page });
+    const query = getCombinedQuery();
+    if (query) {
+      handleSearch({ q: query, per_page: 30, page: page });
     } else {
       console.log("Search aborted: Query is empty.");
+      onSearchSuccess([], 0);
     }
   };
 
+  // First time submit of a query, only triggers when the form submits!
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setCurrentPage(1); // Always reset to page 1 for a new search
+    setCurrentPage(1);
     executeSearch(1);
   };
 
+  // Here to prevent issue when first booting up the site
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+    executeSearch(currentPage);
+  }, [currentPage]);
   return (
     <>
       <div className="columns">
@@ -95,7 +108,6 @@ const SearchForm: React.FC<SearchFormProps> = ({
           </form>
         </div>
       </div>
-      {/* {Children} */}
     </>
   );
 };
