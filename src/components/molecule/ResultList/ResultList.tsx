@@ -9,6 +9,10 @@ interface ResultListProps {
 }
 
 const ResultList: React.FC<ResultListProps> = ({ results }) => {
+  if (!results) {
+    return null; // or return an empty fragment <> </>
+  }
+
   if (results.length === 0) {
     return (
       <div className="container">

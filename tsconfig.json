@@ -11,9 +11,6 @@
 
     // Also, ensure these were set from our previous debugging steps:
     "jsx": "react",
-    "types": [
-      // ... your test runner types (jest or vitest/globals)
-      "@testing-library/jest-dom"
-    ]
+    "types": ["vitest/globals", "@testing-library/jest-dom"]
   }
 }

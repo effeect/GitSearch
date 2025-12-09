@@ -1,5 +1,6 @@
 import React from "react";
 import { useState } from "react";
+import SearchButton from "../SearchButton/SearchButton";
 
 interface SearchBarProps {
   onQueryChange: (query: string) => void;
@@ -7,8 +8,6 @@ interface SearchBarProps {
 
 // Taken from https://bulma.io/documentation/form/input/
 const SearchBar = ({ onQueryChange }: SearchBarProps) => {
-  // Handling the search query from the inside of the search bar
-
   const [searchQuery, setSearchQuery] = useState("");
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -18,16 +17,19 @@ const SearchBar = ({ onQueryChange }: SearchBarProps) => {
   };
 
   return (
-    <div className="field">
+    <div className="field ">
       <label className="label">Search for Github Repository</label>
-      <div className="control">
-        <input
-          className="input is-primary"
-          type="text"
-          placeholder="Primary input"
-          value={searchQuery}
-          onChange={handleInputChange}
-        />
+      <div className="field has-addons is-justify-content-center">
+        <div className="control">
+          <input
+            className="input is-primary"
+            type="text"
+            placeholder="Search"
+            value={searchQuery}
+            onChange={handleInputChange}
+          />
+        </div>
+        <SearchButton isAddon={true}></SearchButton>
       </div>
     </div>
   );

@@ -1,7 +1,14 @@
 // src/setupTests.ts
 
-// Import the installed polyfill library
-import "text-encoding";
+import { expect, afterEach } from "vitest";
+import { cleanup } from "@testing-library/react";
+import * as matchers from "@testing-library/jest-dom/matchers";
+// or use import '@testing-library/jest-dom/vitest'; (recommended modern approach)
 
-// Import the jest-dom matchers (from previous steps)
-import "@testing-library/jest-dom";
+// Extends Vitest's expect with the custom matchers from jest-dom
+expect.extend(matchers);
+
+// Runs a cleanup after each test case (e.g., clearing the DOM)
+afterEach(() => {
+  cleanup();
+});

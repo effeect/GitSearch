@@ -5,18 +5,9 @@ const Footer = () => {
     <>
       <div className="mt-4"></div>
       <div className="container has-text-centered">
-        <p>
-          <strong>Bulma</strong> by{" "}
-          <a href="https://jgthms.com">Jeremy Thomas</a>. The source code is
-          licensed
-          <a href="https://opensource.org/license/mit"> MIT</a>. The website
-          content is licensed
-          <a href="https://creativecommons.org/licenses/by-nc-sa/4.0//">
-            CC BY NC SA 4.0
-          </a>
-          .
-        </p>
+        <p>Built by Oliver Dimes with React, Bulma and Octokit</p>
       </div>
+      <div className="mt-4"></div>
     </>
   );
 };

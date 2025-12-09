@@ -1,7 +1,6 @@
 import SearchBar from "../../atoms/SearchBar/SearchBar";
-import SearchButton from "../../atoms/SearchButton/SearchButton";
 import RuleSet from "../RuleSet/RuleSet";
-import React from "react";
+import React, { Children } from "react";
 import { useState } from "react";
 
 type searchParams = {
@@ -13,13 +12,17 @@ type searchParams = {
 
 interface SearchFormProps {
   // A function that accepts an array of repository items (data) and returns void
-  onSearchSuccess: (data: any[]) => void;
+  onSearchSuccess: (data: any[], total_count: number) => void;
   setLoading: (isLoading: boolean) => void;
+  currentPage: number;
+  setCurrentPage: (page: number) => void;
 }
 
 const SearchForm: React.FC<SearchFormProps> = ({
   onSearchSuccess,
   setLoading,
+  currentPage = 1, // Setting default
+  setCurrentPage,
 }) => {
   const [currentSearchQuery, setCurrentSearchQuery] = useState("");
   const [qualiferQuery, setQualifierQuery] = useState("");
@@ -54,7 +57,7 @@ const SearchForm: React.FC<SearchFormProps> = ({
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
-      onSearchSuccess(data);
+      onSearchSuccess(data, data.length);
       setLoading(false);
       console.log("Search Results:", data);
     } catch (error) {
@@ -63,32 +66,36 @@ const SearchForm: React.FC<SearchFormProps> = ({
     }
   };
 
-  const executeSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-
+  const executeSearch = (page: number) => {
     const combinedQuery = [currentSearchQuery, qualiferQuery]
       .filter(Boolean)
       .join(" ")
       .trim();
     console.log(combinedQuery);
     if (combinedQuery) {
-      handleSearch({ q: combinedQuery, per_page: 30, page: 1 });
+      handleSearch({ q: combinedQuery, per_page: 30, page: page });
     } else {
       console.log("Search aborted: Query is empty.");
     }
   };
 
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setCurrentPage(1); // Always reset to page 1 for a new search
+    executeSearch(1);
+  };
+
   return (
     <>
       <div className="columns">
-        <div className="column">
-          <form className="box" onSubmit={executeSearch}>
+        <div className="column has-text-centered">
+          <form className="box" onSubmit={handleSubmit}>
             <SearchBar onQueryChange={handleSearchBarChange} />
             <RuleSet onQualifiersChange={handleQualifersChange} />
-            <SearchButton />
           </form>
         </div>
       </div>
+      {/* {Children} */}
     </>
   );
 };
