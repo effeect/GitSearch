@@ -16,25 +16,36 @@ interface SearchFormProps {
   // A function that accepts an array of repository items (data) and returns void
   onSearchSuccess: (data: any[], total_count: number) => void;
   setLoading: (isLoading: boolean) => void;
-  currentPage: number;
   setCurrentPage: (page: number) => void;
+  // 💡 NEW/UPDATED PROPS: We receive the search state from the parent/URL
+  currentQuery: string;
+  currentPage: number;
+  perPage: number;
+  onNewSearch: (query: string) => void; // Function to update URL
 }
 
 const SearchFormQuery: React.FC<SearchFormProps> = ({
   onSearchSuccess,
   setLoading,
+  currentQuery, // Destructure the URL state
   currentPage,
+  perPage,
+  onNewSearch, // Destructure the URL updater function
   setCurrentPage,
 }) => {
   const [currentSearchQuery, setCurrentSearchQuery] = useState("");
   const [qualiferQuery, setQualifierQuery] = useState("");
-  const [searchQuery, setSearchQuery] = useState("");
+
+  const searchQuery = currentQuery;
   const getCombinedQuery = () =>
     [currentSearchQuery, qualiferQuery].filter(Boolean).join(" ").trim();
 
   // React Query is here with all the things we need
   const { isLoading, error, data } = useQuery({
-    queryKey: ["repoData", { q: searchQuery, per_page: 30, page: currentPage }],
+    queryKey: [
+      "repoData",
+      { q: searchQuery, per_page: perPage, page: currentPage },
+    ],
     queryFn: () => fetchRepoData(searchQuery, 30, currentPage),
     enabled: !!searchQuery,
     staleTime: 1000 * 60 * 5,
@@ -53,7 +64,7 @@ const SearchFormQuery: React.FC<SearchFormProps> = ({
   const executeSearch = () => {
     const query = getCombinedQuery();
     console.log(query);
-    setSearchQuery(query);
+    onNewSearch(query);
 
     console.log(searchQuery);
   };
@@ -61,17 +72,11 @@ const SearchFormQuery: React.FC<SearchFormProps> = ({
   // First time submit of a query, only triggers when the form submits!
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setCurrentPage(1);
     executeSearch();
   };
 
   useEffect(() => {
-    // 1a. Update Parent's Loading State
     setLoading(isLoading);
-    console.log(data);
-    // console.log(data.items);
-    // 1b. Handle Data Success
-    // 'data' will be defined if the query was successful and not loading
     if (data && !isLoading) {
       onSearchSuccess(data);
     }
