@@ -36,7 +36,11 @@ const ResultList: React.FC<ResultListProps> = ({ results }) => {
         </h3>
 
         {results.items?.map((repo, index) => (
-          <ResultField repo={repo} index={index} />
+          <ResultField
+            repo={repo}
+            index={index}
+            key={repo.id || repo.full_name || index}
+          />
         ))}
       </div>
     );

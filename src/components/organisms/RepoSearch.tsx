@@ -1,26 +1,13 @@
-import React from "react";
-
-import { useState, useMemo } from "react";
+import { useMemo } from "react";
 import ResultList from "../molecule/ResultList/ResultList";
 import LoadingIcon from "../atoms/LoadingIcon/LoadingIcon";
 import PageButton from "../atoms/PageButton/PageButton";
 import SearchFormQuery from "../molecule/SearchForm/SearchFormQuery";
 import { useSearchParams } from "react-router-dom";
-
-type dataType = {
-  items: [];
-  total_count: number;
-};
+import fetchRepoData from "../../api/fetchGithubRepos";
+import { useQuery } from "@tanstack/react-query";
 
 const RepoSearch = () => {
-  const [results, setResults] = useState([]);
-  const [loading, isLoading] = useState(false);
-
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalResults, setTotalResults] = useState(0);
-  const pageSize = 30; // matches per_page in SearchForm
-
-  // 💡 1. Use useSearchParams to manage state in the URL
   const [searchParams, setSearchParams] = useSearchParams();
 
   // Convert URL string values to numbers/strings
@@ -28,16 +15,25 @@ const RepoSearch = () => {
   const pageParam = parseInt(searchParams.get("page") || "1", 10);
   const perPageParam = parseInt(searchParams.get("per_page") || "30", 10);
 
+  const { data, isLoading, error } = useQuery({
+    // The Query Key uses the URL-driven state directly
+    queryKey: [
+      "repoData",
+      { q: queryParam, per_page: perPageParam, page: pageParam },
+    ],
+    queryFn: () => fetchRepoData(queryParam, perPageParam, pageParam),
+    enabled: !!queryParam, // Only fetch if a query exists
+    staleTime: 1000 * 60 * 5,
+  });
+
+  const results = data || [];
+  const totalResults = data?.total_count || 0;
+  const pageSize = perPageParam;
+
   const totalPages = useMemo(() => {
     if (totalResults === 0) return 0;
     return Math.ceil(totalResults / pageSize);
   }, [totalResults, pageSize]); // Depend on totalResults and pageSize
-
-  const handleSearchResults = (data: dataType) => {
-    console.log(data);
-    setResults(data);
-    setTotalResults(data.total_count);
-  };
 
   const handlePageChange = (page: number) => {
     const newSearchParams = new URLSearchParams(searchParams);
@@ -54,16 +50,12 @@ const RepoSearch = () => {
   return (
     <>
       <SearchFormQuery
-        onSearchSuccess={handleSearchResults}
-        setLoading={isLoading}
-        currentPage={pageParam}
         currentQuery={queryParam}
-        perPage={perPageParam}
-        setCurrentPage={setCurrentPage}
         onNewSearch={handleNewSearch}
       />
       {/* Simple loading logic*/}
-      {loading ? <LoadingIcon /> : <ResultList results={results} />}
+      {error?.message ? <div>Error has occured</div> : null}
+      {isLoading ? <LoadingIcon /> : <ResultList results={results} />}
       {totalResults > 0 && totalPages >= 1 && (
         <PageButton
           page={pageParam}

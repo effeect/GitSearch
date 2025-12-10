@@ -1,9 +1,7 @@
-import { useQuery } from "@tanstack/react-query";
 import SearchBar from "../../atoms/SearchBar/SearchBar";
 import RuleSet from "../RuleSet/RuleSet";
-import React, { Children } from "react";
-import { useState, useRef, useEffect } from "react";
-import fetchRepoData from "../../../api/fetchGithubRepos";
+import React from "react";
+import { useState, useEffect } from "react";
 
 type searchParams = {
   q: String;
@@ -25,13 +23,8 @@ interface SearchFormProps {
 }
 
 const SearchFormQuery: React.FC<SearchFormProps> = ({
-  onSearchSuccess,
-  setLoading,
-  currentQuery, // Destructure the URL state
-  currentPage,
-  perPage,
-  onNewSearch, // Destructure the URL updater function
-  setCurrentPage,
+  currentQuery,
+  onNewSearch,
 }) => {
   const [currentSearchQuery, setCurrentSearchQuery] = useState("");
   const [qualiferQuery, setQualifierQuery] = useState("");
@@ -39,17 +32,6 @@ const SearchFormQuery: React.FC<SearchFormProps> = ({
   const searchQuery = currentQuery;
   const getCombinedQuery = () =>
     [currentSearchQuery, qualiferQuery].filter(Boolean).join(" ").trim();
-
-  // React Query is here with all the things we need
-  const { isLoading, error, data } = useQuery({
-    queryKey: [
-      "repoData",
-      { q: searchQuery, per_page: perPage, page: currentPage },
-    ],
-    queryFn: () => fetchRepoData(searchQuery, 30, currentPage),
-    enabled: !!searchQuery,
-    staleTime: 1000 * 60 * 5,
-  });
 
   // The function automatically knows 'newQuery' is a string thanks to the SearchBarProps interface
   const handleSearchBarChange = (newQuery: string) => {
@@ -74,16 +56,6 @@ const SearchFormQuery: React.FC<SearchFormProps> = ({
     e.preventDefault();
     executeSearch();
   };
-
-  useEffect(() => {
-    setLoading(isLoading);
-    if (data && !isLoading) {
-      onSearchSuccess(data);
-    }
-    if (error) {
-      console.error("React Query Error:", error);
-    }
-  }, [data, isLoading, error, onSearchSuccess, setLoading]);
 
   return (
     <>

@@ -29,7 +29,7 @@ function App() {
       // Main Layout which contains the navbar/footer
       <Route path="/" element={<MainLayout />}>
         <Route index element={<HomePage />} />
-        <Route path="/:owner/:repoName" element={<RepoPage />}></Route>
+        <Route path="/:owner/:repo" element={<RepoPage />}></Route>
       </Route>
     )
   );
