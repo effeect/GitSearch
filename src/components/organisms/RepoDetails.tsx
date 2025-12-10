@@ -26,7 +26,6 @@ const RepoDetails = () => {
   });
 
   const results = data || [];
-  console.log(results);
   return (
     // <div className="container">
     <section className="hero is-fullheight">

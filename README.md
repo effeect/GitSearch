@@ -1,75 +1,27 @@
-# React + TypeScript + Vite
+# GitSearch
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is a redo of the github repo search app found here : https://github.com/effeect/github-repo-search-app
 
-Currently, two official plugins are available:
+# Why remake it?
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Long story short but it was made as a technical assessment and I wasn't happy with the way it turned out and had a few fundamental design flaws upon reflection. After spending some time doing some research and pondering, I decided to make a new one from scratch.
 
-## React Compiler
+# What's changed?
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+I've made a few changes but my main one was to take advantage of React-Query and some other design principles :
 
-Note: This will impact Vite dev & build performances.
+- React Query has compressed a lot of annoying issues I was having with loading state and keeping things clean. I could switch back if React Query was non-existent tomorrow but I'm happy with what I've got
+- Frankly, all of the components in the previous application were particularly messy so I decided to adopt an atomic design principal, this is my first time doing it and whilst I don't think its perfect, its miles better than before and it should allow me to do automated tests quite easily
 
-## Expanding the ESLint configuration
+Read more about Atomic design here : https://medium.com/@abdallahosama8053/mastering-atomic-design-in-react-a-practical-guide-for-scalable-ui-architecture-bbb86abed541
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+# API is now seperate
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+GitSearch-API is a seperate repo, can be found here : https://github.com/effeect/GitSearch-API/tree/main
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+# Still to do
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+I haven't done a feature complete redo yet and there is some things I want to implement fully :
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+- JSONServer implementation that allows me to quickly test without the need for the API to be live and running (low priority but still would be nice)
+- Take advantage of Vitest
