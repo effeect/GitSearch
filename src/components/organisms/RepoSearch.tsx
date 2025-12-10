@@ -1,10 +1,16 @@
 import React from "react";
 
 import { useState, useMemo } from "react";
-import SearchForm from "../molecule/SearchForm/SearchForm";
 import ResultList from "../molecule/ResultList/ResultList";
 import LoadingIcon from "../atoms/LoadingIcon/LoadingIcon";
 import PageButton from "../atoms/PageButton/PageButton";
+import SearchFormQuery from "../molecule/SearchForm/SearchFormQuery";
+import { useSearchParams } from "react-router-dom";
+
+type dataType = {
+  items: [];
+  total_count: number;
+};
 
 const RepoSearch = () => {
   const [results, setResults] = useState([]);
@@ -12,23 +18,19 @@ const RepoSearch = () => {
 
   const [currentPage, setCurrentPage] = useState(1);
   const [totalResults, setTotalResults] = useState(0);
-
   const pageSize = 30; // matches per_page in SearchForm
 
-  // UseMemo is actually super cool imo https://react.dev/reference/react/useMemo
-  // TODO, handle if the search is exactly 30 but the next page is empty!
   const totalPages = useMemo(() => {
-    // console.log(totalResults);
-    if (totalResults < 30) return 0;
-    else return 1;
-  }, [totalResults, pageSize]);
+    if (totalResults === 0) return 0;
+    return Math.ceil(totalResults / pageSize);
+  }, [totalResults, pageSize]); // Depend on totalResults and pageSize
 
-  const handleSearchResults = (data: any[], totalCount: number) => {
+  const handleSearchResults = (data: dataType) => {
     setResults(data);
-    setTotalResults(totalCount);
-    // console.log(data);
-    // console.log(totalPages);
-    // console.log(currentPage >= totalPages);
+    console.log(data);
+    console.log(data.total_count);
+    setTotalResults(data.total_count);
+    setCurrentPage(currentPage);
   };
 
   const handlePageChange = (page: number) => {
@@ -37,7 +39,7 @@ const RepoSearch = () => {
   };
   return (
     <>
-      <SearchForm
+      <SearchFormQuery
         onSearchSuccess={handleSearchResults}
         setLoading={isLoading}
         currentPage={currentPage}
@@ -49,7 +51,7 @@ const RepoSearch = () => {
         <PageButton
           page={currentPage}
           handlePageChange={handlePageChange} // This calculation is correct and uses the value updated in the previous render cycle
-          disableNext={totalPages == 0}
+          disableNext={currentPage >= totalPages}
         />
       )}
     </>

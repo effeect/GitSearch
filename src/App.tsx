@@ -17,9 +17,11 @@ import MainLayout from "./layouts/MainLayout";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { fas } from "@fortawesome/free-solid-svg-icons";
 import RepoPage from "./pages/RepoPage";
-
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 // Adding Font Answesome Icons
 library.add(fas);
+
+const queryClient = new QueryClient();
 
 function App() {
   const router = createBrowserRouter(
@@ -35,7 +37,9 @@ function App() {
   // Returning the router that is defined above
   return (
     <>
-      <RouterProvider router={router} />
+      <QueryClientProvider client={queryClient}>
+        <RouterProvider router={router} />
+      </QueryClientProvider>
     </>
   );
 }

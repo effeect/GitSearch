@@ -2,36 +2,45 @@
 import React from "react";
 import { ResultField } from "../../atoms/ResultField/ResultField";
 
-type RepoResult = any;
+type RepoResult = {
+  items: [];
+  total_count: number;
+};
 
 interface ResultListProps {
-  results: RepoResult[];
+  results: RepoResult;
 }
 
 const ResultList: React.FC<ResultListProps> = ({ results }) => {
+  // If we haven't searched for anything, just return nothing
   if (!results) {
-    return null; // or return an empty fragment <> </>
+    return null;
   }
 
-  if (results.length === 0) {
+  // If no results found, just
+  if (results.total_count === 0) {
     return (
       <div className="container">
-        <h3 className="title is-5 has-text-centered">No repositories found.</h3>
+        <h3 className="title is-5 has-text-centered">
+          No repositories found. Try again!
+        </h3>
       </div>
     );
   }
 
-  return (
-    <div className="container">
-      <h3 className="title is-5 has-text-centered">
-        Found {results.length} Repositories
-      </h3>
+  if (results.items) {
+    return (
+      <div className="container">
+        <h3 className="title is-5 has-text-centered">
+          Found {results.total_count} Repositories
+        </h3>
 
-      {results.map((repo, index) => (
-        <ResultField repo={repo} index={index} />
-      ))}
-    </div>
-  );
+        {results.items?.map((repo, index) => (
+          <ResultField repo={repo} index={index} />
+        ))}
+      </div>
+    );
+  }
 };
 
 export default ResultList;

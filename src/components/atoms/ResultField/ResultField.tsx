@@ -44,7 +44,6 @@ export const ResultField = ({ index, repo }: ResultFieldProps) => {
             {/* The Button Links! */}
             <Link
               to={`/${repo.full_name}`}
-              target="_blank" // Opens the link in a new tab
               rel="noopener noreferrer" // Recommended for security when using target="_blank"
               className="button is-info is-small"
             >
@@ -53,7 +52,6 @@ export const ResultField = ({ index, repo }: ResultFieldProps) => {
             <div className="mt-2"></div>
             <Link
               to={repo.html_url}
-              target="_blank" // Opens the link in a new tab
               rel="noopener noreferrer" // Recommended for security when using target="_blank"
               className="button is-light is-small"
             >
