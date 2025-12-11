@@ -6,7 +6,12 @@ import fetchRepoDetails from "../../api/fetchRepoDetails";
 import LoadingIcon from "../atoms/LoadingIcon";
 import LinkButton from "../atoms/LinkButton";
 
-import { faHome, faUser, faCog } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCodeCommit,
+  faCodePullRequest,
+  faWarning,
+  faCode,
+} from "@fortawesome/free-solid-svg-icons";
 
 const RepoDetails = () => {
   // States from React for the App
@@ -30,10 +35,9 @@ const RepoDetails = () => {
   });
 
   const results = data || [];
-  console.log(data);
   return (
     <section className="hero is-large is-dark">
-      <div className="hero-body">
+      <div className="hero-body has-text-centered">
         <p className="title">
           {owner}/{repo}
         </p>
@@ -45,16 +49,54 @@ const RepoDetails = () => {
           <p className="subtitle">{results.description}</p>
         )}
         <div className="mt-4"></div>
-        <p className="subtitle"></p>
-        <LinkButton
-          icon={faCog}
-          to="Hello"
-          text="this sucks"
-          buttonClass="is-danger"
-        />
+
+        {/* Column layout for the buttons to access the search functions of the application*/}
+
+        {isLoading ? null : ButtonLayout()}
       </div>
     </section>
   );
+
+  function ButtonLayout() {
+    return (
+      <div className="columns">
+        <div className="column"></div>
+        <div className="column">
+          <LinkButton
+            icon={faCodeCommit}
+            to="commit"
+            text="Commit Search"
+            buttonClass="is-link"
+          />
+        </div>
+        <div className="column">
+          <LinkButton
+            icon={faCode}
+            to="code"
+            text="Code Search"
+            buttonClass="is-link"
+          />
+        </div>
+        <div className="column">
+          <LinkButton
+            icon={faCodePullRequest}
+            to="pr"
+            text="PR Search"
+            buttonClass="is-link"
+          />
+        </div>
+        <div className="column">
+          <LinkButton
+            icon={faWarning}
+            to="issue"
+            text="Issue Search"
+            buttonClass="is-link"
+          />
+        </div>
+        <div className="column"></div>
+      </div>
+    );
+  }
 };
 
 export default RepoDetails;

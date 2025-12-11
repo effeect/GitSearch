@@ -1,24 +1,10 @@
 import SearchBar from "../../atoms/SearchBar/SearchBar";
 import RuleSet from "../RuleSet/RuleSet";
 import React from "react";
-import { useState, useEffect } from "react";
-
-type searchParams = {
-  q: String;
-  per_page?: number;
-  page?: number;
-  sort?: string;
-};
+import { useState } from "react";
 
 interface SearchFormProps {
-  // A function that accepts an array of repository items (data) and returns void
-  onSearchSuccess: (data: any[], total_count: number) => void;
-  setLoading: (isLoading: boolean) => void;
-  setCurrentPage: (page: number) => void;
-  // 💡 NEW/UPDATED PROPS: We receive the search state from the parent/URL
   currentQuery: string;
-  currentPage: number;
-  perPage: number;
   onNewSearch: (query: string) => void; // Function to update URL
 }
 
@@ -30,8 +16,10 @@ const SearchFormQuery: React.FC<SearchFormProps> = ({
   const [qualiferQuery, setQualifierQuery] = useState("");
 
   const searchQuery = currentQuery;
-  const getCombinedQuery = () =>
-    [currentSearchQuery, qualiferQuery].filter(Boolean).join(" ").trim();
+
+  const getCombinedQuery = () => {
+    return [currentSearchQuery, qualiferQuery].filter(Boolean).join(" ").trim();
+  };
 
   // The function automatically knows 'newQuery' is a string thanks to the SearchBarProps interface
   const handleSearchBarChange = (newQuery: string) => {

@@ -1,28 +1,41 @@
-import { useMemo } from "react";
-import ResultList from "../molecule/ResultList/ResultList";
-import LoadingIcon from "../atoms/LoadingIcon/LoadingIcon";
-import PageButton from "../atoms/PageButton/PageButton";
-import SearchFormQuery from "../molecule/SearchForm/SearchFormQuery";
-import { useSearchParams } from "react-router-dom";
-import fetchRepoData from "../../api/fetchGithubRepos";
+import React from "react";
+import fetchGithubCommits from "../../api/fetchGithubCommits";
+
 import { useQuery } from "@tanstack/react-query";
+import { useParams, useSearchParams } from "react-router-dom";
+import SearchFormQuery from "../molecule/SearchForm/SearchFormQuery";
+import LoadingIcon from "../atoms/LoadingIcon";
+import ResultList from "../molecule/ResultList/ResultList";
+import PageButton from "../atoms/PageButton/PageButton";
+import { useMemo } from "react";
 
-const RepoSearch = () => {
+const CommitSearch = () => {
+  const { owner: rawOwner, repo: rawRepo } = useParams();
+  const owner = rawOwner ?? "";
+  const repo = rawRepo ?? "";
+
   const [searchParams, setSearchParams] = useSearchParams();
-
   // Convert URL string values to numbers/strings
   const queryParam = searchParams.get("q") || "";
   const pageParam = parseInt(searchParams.get("page") || "1", 10);
   const perPageParam = parseInt(searchParams.get("per_page") || "30", 10);
 
+  // React query hook to get data against the repo in question
   const { data, isLoading, error } = useQuery({
     // The Query Key uses the URL-driven state directly
     queryKey: [
-      "repoData",
-      { q: queryParam, per_page: perPageParam, page: pageParam },
+      "repoCommits",
+      {
+        q: queryParam,
+        per_page: perPageParam,
+        page: pageParam,
+        owner: owner,
+        repo: repo,
+      },
     ],
-    queryFn: () => fetchRepoData(queryParam, perPageParam, pageParam),
-    enabled: !!queryParam, // Only fetch if a query exists
+    queryFn: () =>
+      fetchGithubCommits(queryParam, perPageParam, pageParam, owner, repo),
+    enabled: !!owner, // Only fetch if a query exists
     staleTime: 1000 * 60 * 5,
   });
 
@@ -48,6 +61,7 @@ const RepoSearch = () => {
     setSearchParams(newSearchParams);
   };
 
+  console.log(data);
   return (
     <>
       <SearchFormQuery
@@ -68,4 +82,4 @@ const RepoSearch = () => {
   );
 };
 
-export default RepoSearch;
+export default CommitSearch;
