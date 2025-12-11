@@ -12,7 +12,17 @@ const fetchRepoData = async (query: string, per_page: number, page: number) => {
   });
 
   if (!response.ok) {
-    throw new Error("Network response was not ok");
+    let errorData: any = {};
+    try {
+      errorData = await response.json();
+    } catch (e) {
+      console.error("Failed to parse error response body", e);
+    }
+
+    const errorMessage =
+      errorData.error || response.statusText || "An unknown error occurred";
+
+    throw new Error(errorMessage);
   }
 
   return response.json();

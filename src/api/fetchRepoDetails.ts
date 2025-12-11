@@ -8,7 +8,17 @@ const fetchRepoDetails = async (owner: string, repo: string) => {
   });
 
   if (!response.ok) {
-    throw new Error("Network response was not ok");
+    let errorData: any = {};
+    try {
+      errorData = await response.json();
+    } catch (e) {
+      console.error("Failed to parse error response body", e);
+    }
+
+    const errorMessage =
+      errorData.error || response.statusText || "An unknown error occurred";
+
+    throw new Error(errorMessage);
   }
 
   return response.json();
