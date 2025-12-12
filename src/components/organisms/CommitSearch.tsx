@@ -35,7 +35,7 @@ const CommitSearch = () => {
     ],
     queryFn: () =>
       fetchGithubCommits(queryParam, perPageParam, pageParam, owner, repo),
-    enabled: !!owner, // Only fetch if a query exists
+    enabled: !!queryParam, // Only fetch if a query exists
     staleTime: 1000 * 60 * 5,
   });
 
@@ -54,6 +54,7 @@ const CommitSearch = () => {
     setSearchParams(newSearchParams); // Update the URL
   };
 
+  console.log(results);
   const handleNewSearch = (query: string) => {
     const newSearchParams = new URLSearchParams(searchParams);
     newSearchParams.set(`q`, query);
