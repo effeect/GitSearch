@@ -8,6 +8,7 @@ import LoadingIcon from "../atoms/LoadingIcon";
 import ResultList from "../molecule/ResultList/ResultList";
 import PageButton from "../atoms/PageButton/PageButton";
 import { useMemo } from "react";
+import ResultListCommit from "../molecule/ResultListCommit/ResultListCommit";
 
 const CommitSearch = () => {
   const { owner: rawOwner, repo: rawRepo } = useParams();
@@ -54,7 +55,7 @@ const CommitSearch = () => {
     setSearchParams(newSearchParams); // Update the URL
   };
 
-  console.log(results);
+  // console.log(results);
   const handleNewSearch = (query: string) => {
     const newSearchParams = new URLSearchParams(searchParams);
     newSearchParams.set(`q`, query);
@@ -71,7 +72,7 @@ const CommitSearch = () => {
       />
       {/* Simple loading logic*/}
       {error?.message ? <div>Error has occured</div> : null}
-      {isLoading ? <LoadingIcon /> : <ResultList results={results} />}
+      {isLoading ? <LoadingIcon /> : <ResultListCommit results={results} />}
       {totalResults > 0 && totalPages >= 1 && (
         <PageButton
           page={pageParam}

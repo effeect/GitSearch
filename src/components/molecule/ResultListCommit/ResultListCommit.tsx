@@ -1,6 +1,7 @@
 // ResultList.tsx
 import React from "react";
-import { ResultField } from "../../atoms/ResultField/ResultField";
+
+import ResultFieldCommit from "../../atoms/ResultFieldCommit/ResultFieldCommit";
 
 type RepoResult = {
   items: [];
@@ -11,7 +12,7 @@ interface ResultListProps {
   results: RepoResult;
 }
 
-const ResultList: React.FC<ResultListProps> = ({ results }) => {
+const ResultListCommit: React.FC<ResultListProps> = ({ results }) => {
   // If we haven't searched for anything, just return nothing
   if (!results) {
     return null;
@@ -36,15 +37,11 @@ const ResultList: React.FC<ResultListProps> = ({ results }) => {
         </h3>
 
         {results.items?.map((repo, index) => (
-          <ResultField
-            repo={repo}
-            index={index}
-            key={repo.id || repo.full_name || index}
-          />
+          <ResultFieldCommit repo={repo} index={index} key={index} />
         ))}
       </div>
     );
   }
 };
 
-export default ResultList;
+export default ResultListCommit;

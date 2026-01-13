@@ -54,8 +54,15 @@ const RepoSearch = () => {
         currentQuery={queryParam}
         onNewSearch={handleNewSearch}
       />
-      {/* Simple loading logic*/}
-      {error?.message ? <div>Error has occured</div> : null}
+      {/* If no output from the API (not running), just state no response from api */}
+      {error?.message ? (
+        <div className="container">
+          <h3 className="title is-5 has-text-centered is-danger">
+            No response from API, please check config!
+          </h3>
+        </div>
+      ) : null}
+      {/* Display a simple fontawesome icon if we are waiting for the results */}
       {isLoading ? <LoadingIcon /> : <ResultList results={results} />}
       {totalResults > 0 && totalPages >= 1 && (
         <PageButton

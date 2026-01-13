@@ -13,9 +13,8 @@ export default defineConfig({
   ],
   server: {
     proxy: {
-      // Any request starting with '/api' will be forwarded to the Express server
       "/api": {
-        target: "http://localhost:5000", // Your Express server port
+        target: "http://localhost:5001", // Your Express server port
         changeOrigin: true,
         // The rewrite rule is optional, but often useful if your Express routes
         // don't include the '/api' prefix, e.g., Express route is just '/data'
