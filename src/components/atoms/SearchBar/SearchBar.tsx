@@ -22,7 +22,7 @@ const SearchBar = ({ onQueryChange }: SearchBarProps) => {
       <div className="field has-addons is-justify-content-center">
         <div className="control">
           <input
-            className="input is-primary"
+            className="input "
             type="text"
             placeholder="Search"
             value={searchQuery}

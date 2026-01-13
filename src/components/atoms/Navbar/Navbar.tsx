@@ -2,7 +2,7 @@
 const Navbar = () => {
   return (
     <nav
-      className="navbar is-spaced "
+      className="navbar is-justify-content-center"
       role="navigation"
       aria-label="main navigation"
     >
