@@ -63,7 +63,11 @@ const RepoSearch = () => {
         </div>
       ) : null}
       {/* Display a simple fontawesome icon if we are waiting for the results */}
-      {isLoading ? <LoadingIcon /> : <ResultList results={results} />}
+      {isLoading ? (
+        <LoadingIcon />
+      ) : (
+        <ResultList results={results} isRepo={true} />
+      )}
       {totalResults > 0 && totalPages >= 1 && (
         <PageButton
           page={pageParam}

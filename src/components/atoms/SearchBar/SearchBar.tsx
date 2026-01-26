@@ -20,7 +20,7 @@ const SearchBar = ({ onQueryChange }: SearchBarProps) => {
     <div className="field ">
       <label className="label">Search for Github Repository</label>
       <div className="field has-addons is-justify-content-center">
-        <div className="control">
+        <div className="control is-expanded">
           <input
             className="input "
             type="text"
