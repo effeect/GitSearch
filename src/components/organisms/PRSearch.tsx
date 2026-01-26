@@ -65,7 +65,6 @@ const PRSearch = () => {
   console.log(data);
   return (
     <>
-      <h3> PR SEARCH</h3>
       <SearchFormQuery
         currentQuery={queryParam}
         onNewSearch={handleNewSearch}

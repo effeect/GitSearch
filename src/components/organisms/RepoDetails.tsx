@@ -5,12 +5,11 @@ import { useParams } from "react-router-dom";
 import fetchRepoDetails from "../../api/fetchRepoDetails";
 import LoadingIcon from "../atoms/LoadingIcon";
 import LinkButton from "../atoms/LinkButton";
-
+import { Link } from "react-router-dom";
 import {
   faCodeCommit,
   faCodePullRequest,
   faWarning,
-  faCode,
 } from "@fortawesome/free-solid-svg-icons";
 
 const RepoDetails = () => {
@@ -49,7 +48,32 @@ const RepoDetails = () => {
           <p className="subtitle">{results.description}</p>
         )}
         <div className="mt-4"></div>
-
+        {/* Links to the individual tags are working!*/}
+        {results?.topics?.length ? (
+          <div className="tags mt-3 is-centered">
+            {results?.topics?.map((topic: string) => (
+              <span key={topic} className="tag is-rounded">
+                <Link to={`https://github.com/topics/${topic}`}>
+                  <h3>{topic}</h3>
+                </Link>
+              </span>
+            ))}
+          </div>
+        ) : null}
+        <p className="subtitle">
+          Created on{" "}
+          {results?.created_at ? (
+            new Date(results.created_at).toLocaleString("en-US", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+              hour: "numeric",
+              minute: "2-digit",
+            })
+          ) : (
+            <LoadingIcon />
+          )}
+        </p>
         {/* Column layout for the buttons to access the search functions of the application*/}
 
         {isLoading ? null : ButtonLayout()}

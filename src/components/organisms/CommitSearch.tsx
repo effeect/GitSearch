@@ -62,10 +62,9 @@ const CommitSearch = () => {
     setSearchParams(newSearchParams);
   };
 
-  console.log(data);
+  // console.log(data);
   return (
     <>
-      <h3>Commit Details</h3>
       <SearchFormQuery
         currentQuery={queryParam}
         onNewSearch={handleNewSearch}
