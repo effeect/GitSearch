@@ -1,5 +1,3 @@
-import React from "react";
-
 // Interface defintion for each rule
 export interface Rule {
   id: number;
@@ -14,24 +12,9 @@ interface RuleProps {
   onRuleChange: (rule: Rule) => void; //update the rule state
   onRuleDelete: (id: number) => void; //delete the rule
   availableFields: string[]; //Available fields left
+  numericFields: string[];
+  booleanFields: string[];
 }
-
-const FIELD_OPTIONS = [
-  "stars",
-  "language",
-  "topic",
-  "user",
-  "size",
-  "forks",
-  "is",
-  "followers",
-  "template",
-  "archived",
-  "license",
-];
-
-const BOOLEAN_FIELDS = ["template", "archived"];
-const NUMERIC_FIELDS = ["stars", "size", "forks", "followers"];
 
 // Operators for different types of queries
 const OPERATOR_OPTIONS = {
@@ -45,6 +28,8 @@ const Rule = ({
   availableFields,
   onRuleChange,
   onRuleDelete,
+  numericFields,
+  booleanFields,
 }: RuleProps) => {
   // Handles updates to the rules in
   const handleChange = (key: keyof Omit<Rule, "id">, value: string) => {
@@ -52,9 +37,9 @@ const Rule = ({
     onRuleChange(updatedRule);
   };
 
-  const isBooleanField = BOOLEAN_FIELDS.includes(rule.field);
+  const isBooleanField = booleanFields.includes(rule.field);
 
-  const currentOperators = NUMERIC_FIELDS.includes(rule.field)
+  const currentOperators = numericFields.includes(rule.field)
     ? OPERATOR_OPTIONS.numeric
     : OPERATOR_OPTIONS.default;
 

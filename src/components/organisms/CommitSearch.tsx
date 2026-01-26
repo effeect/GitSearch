@@ -69,6 +69,7 @@ const CommitSearch = () => {
       <SearchFormQuery
         currentQuery={queryParam}
         onNewSearch={handleNewSearch}
+        isCommit={true}
       />
       {/* Simple loading logic*/}
       {error?.message ? <div>Error has occured</div> : null}

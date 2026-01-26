@@ -69,6 +69,7 @@ const PRSearch = () => {
       <SearchFormQuery
         currentQuery={queryParam}
         onNewSearch={handleNewSearch}
+        isPR={true}
       />
       {/* Simple loading logic*/}
       {error?.message ? <div>Error has occured</div> : null}

@@ -53,6 +53,7 @@ const RepoSearch = () => {
       <SearchFormQuery
         currentQuery={queryParam}
         onNewSearch={handleNewSearch}
+        isRepo={true}
       />
       {/* If no output from the API (not running), just state no response from api */}
       {error?.message ? (

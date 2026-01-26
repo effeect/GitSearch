@@ -69,6 +69,7 @@ const CodeSearch = () => {
       <SearchFormQuery
         currentQuery={queryParam}
         onNewSearch={handleNewSearch}
+        isCode={true}
       />
       {/* Simple loading logic*/}
       {error?.message ? <div>Error has occured</div> : null}

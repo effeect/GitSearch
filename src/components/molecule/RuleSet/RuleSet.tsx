@@ -1,34 +1,30 @@
 import React, { useState, useEffect } from "react";
 import Rule, { type Rule as RuleType } from "../../atoms/Rules/Rule"; // Assuming Rule.tsx is in the same directory
 
-// Need to implement this so the field options can be altered depending on the search
-const FIELD_OPTIONS = [
-  "stars",
-  "language",
-  "topic",
-  "user",
-  "size",
-  "forks",
-  "is",
-  "followers",
-  "template",
-  "archived",
-  "license",
-];
-
 interface RuleSetProps {
   onQualifiersChange: (qualifierString: string) => void;
+  FIELD_OPTIONS?: string[];
+  BOOLEAN_FIELDS?: string[];
+  NUMERIC_FIELDS?: string[];
 }
 
 let nextId = 0;
 
-const RuleSet = ({ onQualifiersChange }: RuleSetProps) => {
+const RuleSet = ({
+  onQualifiersChange,
+  FIELD_OPTIONS,
+  BOOLEAN_FIELDS,
+  NUMERIC_FIELDS,
+}: RuleSetProps) => {
   const [rules, setRules] = useState<RuleType[]>([]);
-  // To stop duplicating fields
   const usedFields = rules.map((r) => r.field).filter((f) => f !== "");
-  const availableFields = FIELD_OPTIONS.filter(
-    (field) => !usedFields.includes(field)
-  );
+
+  // Will set the available fields if applicable
+  // This is for the filter set rules
+  const availableFields = FIELD_OPTIONS
+    ? FIELD_OPTIONS.filter((field) => !usedFields.includes(field))
+    : [];
+
   // Function to convert the array of rules into a single GitHub query string
   const generateQueryString = (currentRules: RuleType[]): string => {
     return currentRules
@@ -59,7 +55,7 @@ const RuleSet = ({ onQualifiersChange }: RuleSetProps) => {
 
   const handleRuleChange = (updatedRule: RuleType) => {
     setRules((prevRules) =>
-      prevRules.map((r) => (r.id === updatedRule.id ? updatedRule : r))
+      prevRules.map((r) => (r.id === updatedRule.id ? updatedRule : r)),
     );
   };
 
@@ -77,6 +73,8 @@ const RuleSet = ({ onQualifiersChange }: RuleSetProps) => {
           onRuleChange={handleRuleChange}
           onRuleDelete={handleRuleDelete}
           availableFields={[...availableFields, rule.field]}
+          numericFields={NUMERIC_FIELDS}
+          booleanFields={BOOLEAN_FIELDS}
         />
       ))}
       <div className="control">

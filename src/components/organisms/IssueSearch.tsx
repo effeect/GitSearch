@@ -65,10 +65,10 @@ const IssueSearch = () => {
   console.log(data);
   return (
     <>
-      <h3> ISSUE SEARCH</h3>
       <SearchFormQuery
         currentQuery={queryParam}
         onNewSearch={handleNewSearch}
+        isIssue={true}
       />
       {/* Simple loading logic*/}
       {error?.message ? <div>Error has occured</div> : null}
