@@ -69,14 +69,14 @@ const RepoDetails = () => {
             buttonClass="is-link"
           />
         </div>
-        <div className="column">
+        {/* <div className="column">
           <LinkButton
             icon={faCode}
             to="code"
             text="Code Search"
             buttonClass="is-link"
           />
-        </div>
+        </div> */}
         <div className="column">
           <LinkButton
             icon={faCodePullRequest}

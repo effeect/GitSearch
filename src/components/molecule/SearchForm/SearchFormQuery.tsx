@@ -107,8 +107,27 @@ const SearchFormQuery: React.FC<SearchFormProps> = ({
     <>
       <div className="columns">
         <div className="column has-text-centered">
+          {/* <h1 className="is-title-4">Hello world</h1> */}
           <form className="box" onSubmit={handleSubmit}>
-            <SearchBar onQueryChange={handleSearchBarChange} />
+            <div className="field ">
+              {isRepo ? (
+                <label className="label">Search for Repositories</label>
+              ) : isCode ? (
+                <label className="label">Search for Code</label>
+              ) : isCommit ? (
+                <label className="label">Search for Commits</label>
+              ) : isPR ? (
+                <label className="label">Search for Pull Requests</label>
+              ) : isIssue ? (
+                <label className="label">Search for Issues</label>
+              ) : (
+                <label className="label">Not Defined</label>
+              )}
+
+              <div className="field has-addons is-justify-content-center">
+                <SearchBar onQueryChange={handleSearchBarChange} />
+              </div>
+            </div>
             <RuleSet
               onQualifiersChange={handleQualifersChange}
               FIELD_OPTIONS={fields}

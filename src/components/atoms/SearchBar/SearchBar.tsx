@@ -17,21 +17,18 @@ const SearchBar = ({ onQueryChange }: SearchBarProps) => {
   };
 
   return (
-    <div className="field ">
-      <label className="label">Search for Github Repository</label>
-      <div className="field has-addons is-justify-content-center">
-        <div className="control is-expanded">
-          <input
-            className="input "
-            type="text"
-            placeholder="Search"
-            value={searchQuery}
-            onChange={handleInputChange}
-          />
-        </div>
-        <SearchButton isAddon={true}></SearchButton>
+    <>
+      <div className="control is-expanded">
+        <input
+          className="input "
+          type="text"
+          placeholder="Search"
+          value={searchQuery}
+          onChange={handleInputChange}
+        />
       </div>
-    </div>
+      <SearchButton isAddon={true}></SearchButton>
+    </>
   );
 };
 
