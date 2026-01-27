@@ -6,6 +6,7 @@ import SearchFormQuery from "../molecule/SearchForm/SearchFormQuery";
 import { useSearchParams } from "react-router-dom";
 import fetchRepoData from "../../api/fetchGithubRepos";
 import { useQuery } from "@tanstack/react-query";
+import DynamicMetadata from "../atoms/DynamicMeta/DynamicMetadata";
 
 const RepoSearch = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -50,6 +51,11 @@ const RepoSearch = () => {
 
   return (
     <>
+      {/* Dynamic Metadata Function Helper  */}
+      <DynamicMetadata
+        title={"GitSearch - Home"}
+        description={"GitSearch Home Page"}
+      />
       <SearchFormQuery
         currentQuery={queryParam}
         onNewSearch={handleNewSearch}

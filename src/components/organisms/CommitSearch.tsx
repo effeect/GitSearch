@@ -8,6 +8,7 @@ import LoadingIcon from "../atoms/LoadingIcon";
 import ResultList from "../molecule/ResultList/ResultList";
 import PageButton from "../atoms/PageButton/PageButton";
 import { useMemo } from "react";
+import DynamicMetadata from "../atoms/DynamicMeta/DynamicMetadata";
 
 const CommitSearch = () => {
   const { owner: rawOwner, repo: rawRepo } = useParams();
@@ -65,6 +66,10 @@ const CommitSearch = () => {
   // console.log(data);
   return (
     <>
+      <DynamicMetadata
+        title={`GitSearch - Commits of ${owner}/${repo}`}
+        description={`GitSearch - Details of ${owner}/${repo}`}
+      />
       <SearchFormQuery
         currentQuery={queryParam}
         onNewSearch={handleNewSearch}

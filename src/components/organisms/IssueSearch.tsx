@@ -8,6 +8,7 @@ import ResultList from "../molecule/ResultList/ResultList";
 import PageButton from "../atoms/PageButton/PageButton";
 import { useMemo } from "react";
 import fetchGithubIssues from "../../api/fetchGithubIssue";
+import DynamicMetadata from "../atoms/DynamicMeta/DynamicMetadata";
 
 const IssueSearch = () => {
   const { owner: rawOwner, repo: rawRepo } = useParams();
@@ -65,6 +66,10 @@ const IssueSearch = () => {
   console.log(data);
   return (
     <>
+      <DynamicMetadata
+        title={`GitSearch - Issues of ${owner}/${repo}`}
+        description={`GitSearch - Details of ${owner}/${repo}`}
+      />
       <SearchFormQuery
         currentQuery={queryParam}
         onNewSearch={handleNewSearch}
